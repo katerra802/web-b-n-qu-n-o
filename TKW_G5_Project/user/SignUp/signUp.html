@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Đăng Ký</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../SignUp/signUp.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="register-container">
+        <a href="/index.html">
+            <img class="logo" src="../imgs/logo.avif">
+        </a>
+
+        <form>
+            <div class="form-group">
+                <span id="noti"></span>
+            </div>
+            <div class="form-group">
+                <label for="name">Tên</label>
+                <input type="text" class="form-control" id="name" placeholder="Nhập tên của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Địa chỉ Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Nhập email của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="phone" class="form-control" id="phone" placeholder="Nhập số điện thoại của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu của bạn" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Xác nhận Mật khẩu</label>
+                <input type="password" class="form-control" id="confirm-password"
+                    placeholder="Xác nhận mật khẩu của bạn" required>
+            </div>
+            <div class="or-divider">Thông tin nhận hàng</div>
+            <div class="form-group form-section">
+                <label for="city">Chọn Thành phố:</label>
+                <select class="form-control" id="city" selected value="">
+                    <option value="" selected>Chọn tỉnh thành</option>
+                </select>
+                <div class="form-group">
+                    <label for="district">Chọn Quận/Huyện</label>
+                    <select class="form-control" id="district" name="district">
+                        <option value="" selected>Chọn quận huyện</option>
+                    </select>
+                </div>
+                <div class="form-group form-section">
+                    <label for="ward">Chọn Phường/Xã:</label>
+                    <select class="form-control" id="ward">
+                        <option value="" selected>Chọn phường xã</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cus-address">Địa chỉ cụ thể nhân hàng</label>
+                    <input type="text" class="form-control" id="cus-address"
+                        placeholder="Nhập địa chỉ nhận hàng của bạn" required>
+                </div>
+                <button type="button" class="btn btn-warning btn-block" onclick="validateForm()">Đăng Ký</button>
+        </form>
+        <div class="text-center mt-3">
+            <span style="color: white;">Đã có tài khoản? <a href="../signIn-signUp/signIn-Up.html"
+                    style="color: yellow;">Đăng nhập</a></span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        //Code copy để lấy dữ liệu bỏ vào select option địa chỉ
+        var citis = document.getElementById("city");
+        var districts = document.getElementById("district");
+        var wards = document.getElementById("ward");
+        var Parameter = {
+            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+            method: "GET",
+            responseType: "application/json",
+        };
+        var promise = axios(Parameter);
+        promise.then(function (result) {
+            renderCity(result.data);
+        });
+
+        function renderCity(data) {
+            for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Id);
+            }
+            citis.onchange = function () {
+                district.length = 1;
+                ward.length = 1;
+                if (this.value != "") {
+                    const result = data.filter(n => n.Id === this.value);
+
+                    for (const k of result[0].Districts) {
+                        district.options[district.options.length] = new Option(k.Name, k.Id);
+                    }
+                }
+            };
+            district.onchange = function () {
+                ward.length = 1;
+                const dataCity = data.filter((n) => n.Id === citis.value);
+                if (this.value != "") {
+                    const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                    for (const w of dataWards) {
+                        wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                    }
+                }
+            };
+        }
+
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+
+        function validateForm() {
+            let ten = $('#name')[0];
+            let email = $('#email')[0];
+            let sdt = $('#phone')[0];
+            let pass = $('#password')[0];
+            let repass = $('#confirm-password')[0];
+            let tinh = $('#city')[0];
+            let huyen = $('#district')[0];
+            let xa = $('#ward')[0];
+            let nha = $('#cus-address')[0];
+
+            if (isEmpty(ten.value) || isEmpty(email.value) || isEmpty(pass.value) || isEmpty(sdt.value) || isEmpty(repass.value) || isEmpty(tinh.value) || isEmpty(huyen.value) || isEmpty(xa.value) || isEmpty(nha.value)) {
+                thongBaoLoi("Hãy điền đầy đủ thông tin");
+            } else {
+                let regex_sdt = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
+                if (!regex_sdt.test(sdt.value)) {
+                    thongBaoLoi("Hãy tự check số điện thoại");
+                } else {
+                    if (pass.value != repass.value) {
+                        thongBaoLoi("Mật khẩu không trùng nhau");
+                    } else {
+                        let lSUser = localStorage.getItem("user_them");
+                        let dsUserThem;
+
+                        let userMoi = {};
+                        let flag = true;
+                        if (!isEmpty(lSUser)) {
+                            dsUserThem = JSON.parse(lSUser);
+
+                            dsUserThem.some((element, index) => {
+                                if (element["email"] == email.value) {
+                                    flag = false;
+                                    thongBaoLoi("Email đã tồn tại!");
+                                    return true;
+                                }
+                            });
+                            if (flag) {
+                                userMoi = {
+                                    id: dsUserThem[0]["id"] + 1,
+                                    ten: ten.value,
+                                    email: email.value,
+                                    sdt: sdt.value,
+                                    pass: pass.value,
+                                    tinh: tinh.value,
+                                    huyen: huyen.value,
+                                    xa: xa.value,
+                                    nha: nha.value
+                                };
+                            }
+                        } else {
+                            dsUserThem = [];
+                            userMoi = {
+                                id: 0,
+                                ten: ten.value,
+                                email: email.value,
+                                sdt: sdt.value,
+                                pass: pass.value,
+                                tinh: tinh.value,
+                                huyen: huyen.value,
+                                xa: xa.value,
+                                nha: nha.value
+                            };
+                        }
+                        
+                        if(flag) dsUserThem.unshift(userMoi);
+                        let NSXJSON = JSON.stringify(dsUserThem);
+
+                        localStorage.setItem("user_them", NSXJSON);
+
+                        ten.value = '';
+                        email.value = '';
+                        sdt.value = '';
+                        pass.value = '';
+                        repass.value = '';
+                        nha.value = '';
+
+                        if(flag){
+                            localStorage.setItem("user_id", userMoi["id"]);
+                            thongBao("Thêm thành công!");
+                            window.location.href='../signIn-signUp/signIn-Up.html';
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

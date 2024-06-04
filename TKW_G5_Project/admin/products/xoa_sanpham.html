@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <script src="../datas/nhasanxuat.js"></script>
+    <script>
+        let data = arrayNhaSanXuat;
+
+        function isEmpty(value) {
+            return (value == null || value.length == 0);
+        }
+        $(document).ready(function () {
+            let lSX = localStorage.getItem("sp_xoa");
+            let dsXoa = [];
+            let urlParams = new URLSearchParams(document.location.search);
+            id = urlParams.get('id');
+            flag = true;
+            if (!isEmpty(lSX)) {
+                dsXoa = JSON.parse(lSX);
+                dsXoa.some((element, index) => {
+                    flag = true;
+                    if (element["id"] == id) {
+                        flag = false;
+                        return true;
+                    }
+                });
+            }
+
+            if(flag){
+                dsXoa.unshift(id.toString());
+            }
+
+            let NSXJSON = JSON.stringify(dsXoa);
+            localStorage.setItem("sp_xoa", NSXJSON);
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ Sơ Của Tôi</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../includes/style.css">
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../information/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="../../index.html">
+                <img class="logo" src="../imgs/logo.avif">
+            </a>
+
+            <!-- Side bar menu -->
+            <ul class="sidebar">
+                <li onclick="hideSideBar()"><a href="#"><i class="fa-solid fa-xmark"></i></a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="user/about-page.html">About</a></li>
+                <li><a href="user/contact-page.html">Contact</a></li>
+                <li><a href="#">Store</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="user/cart-page.html">Shopping cart</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="container mt-5"
+        style="background-color: whitesmoke !important; margin-top: 100px !important; padding-bottom: 10px !important;">
+        <h2 class="mb-4" style="margin-bottom: 0 !important;">Hồ Sơ Của Tôi</h2>
+        <p>Quản lý thông tin hồ sơ của bạn</p>
+        <div class="or-divider"></div>
+        <form>
+            <span id="noti"></span>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="email" value="********12" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ten" class="col-sm-2 col-form-label">Họ và tên</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="ten">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="sdt" class="col-sm-2 col-form-label">Số điện thoại</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="sdt">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="pass" class="col-sm-2 col-form-label">Mật khẩu</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="pass">
+                </div>
+            </div>
+
+            <!-- <a href="../information/address.html" class="btn btn-danger">Lưu</a> -->
+            <div class="form-group form-section">
+                <label for="city">Chọn Thành phố:</label>
+                <select class="form-control" id="city" selected value="">
+                    <option value="" selected>Chọn tỉnh thành</option>
+                </select>
+                <div class="form-group">
+                    <label for="district">Chọn Quận/Huyện</label>
+                    <select class="form-control" id="district" name="district">
+                        <option value="" selected>Chọn quận huyện</option>
+                    </select>
+                </div>
+                <div class="form-group form-section">
+                    <label for="ward">Chọn Phường/Xã:</label>
+                    <select class="form-control" id="ward">
+                        <option value="" selected>Chọn phường xã</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cus-address">Địa chỉ cụ thể nhân hàng</label>
+                    <input type="text" class="form-control" id="cus-address"
+                        placeholder="Nhập địa chỉ nhận hàng của bạn" required>
+                </div>
+                <button type="button" class="btn btn-warning btn-block" onclick="validateForm()">Lưu</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+        //Code copy để lấy dữ liệu bỏ vào select option địa chỉ
+        var citis = document.getElementById("city");
+        var districts = document.getElementById("district");
+        var wards = document.getElementById("ward");
+        var Parameter = {
+            url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+            method: "GET",
+            responseType: "application/json",
+        };
+        var promise = axios(Parameter);
+        promise.then(function (result) {
+            renderCity(result.data);
+        });
+
+        function renderCity(data) {
+            for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Id);
+            }
+            citis.onchange = function () {
+                district.length = 1;
+                ward.length = 1;
+                if (this.value != "") {
+                    const result = data.filter(n => n.Id === this.value);
+
+                    for (const k of result[0].Districts) {
+                        district.options[district.options.length] = new Option(k.Name, k.Id);
+                    }
+                }
+            };
+            district.onchange = function () {
+                ward.length = 1;
+                const dataCity = data.filter((n) => n.Id === citis.value);
+                if (this.value != "") {
+                    const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                    for (const w of dataWards) {
+                        wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                    }
+                }
+            };
+        }
+
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+
+        let email;
+        let ten;
+        let sdt;
+        let pass;
+        let tinh;
+        let huyen;
+        let xa;
+        let nha;
+        let id;
+        $(document).ready(function () {
+            email = $('#email')[0];
+            ten = $('#ten')[0];
+            sdt = $('#sdt')[0];
+            pass = $('#pass')[0];
+            tinh = $('#city')[0];
+            huyen = $('#district')[0];
+            xa = $('#ward')[0];
+            nha = $('#cus-address')[0];
+            id = localStorage.getItem("user_id");
+            if (isEmpty(id)) {
+                window.location.href = '../../index.html';
+            } else {
+
+                let lSUser = localStorage.getItem("user_them");
+                let dsUserThem;
+
+                let flag = true;
+                if (!isEmpty(lSUser)) {
+                    dsUserThem = JSON.parse(lSUser);
+                    dsUserThem.some((element, index) => {
+                        if (element["id"] == id) {
+                            // console.log(element);
+                            email.value = element["email"];
+                            ten.value = element["ten"];
+                            sdt.value = element["sdt"];
+                            pass.value = element["pass"];
+                            // tinh.value = element["tinh"].toString().padStart(2, '0');
+                            // huyen.value = element["huyen"].toString().padStart(3, '0');
+                            // xa.value = element["xa"].toString().padStart(5, '0');
+                            // // console.log(tinh.value);
+                            nha.value = element["nha"];
+                            return true;
+                        }
+                    });
+                }
+            }
+        });
+
+        function validateForm() {
+            if (isEmpty(ten.value) || isEmpty(email.value) || isEmpty(pass.value) || isEmpty(sdt.value) || isEmpty(tinh.value) || isEmpty(huyen.value) || isEmpty(xa.value) || isEmpty(nha.value)) {
+                thongBaoLoi("Hãy điền đầy đủ thông tin");
+            } else {
+                let regex_sdt = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
+                if (!regex_sdt.test(sdt.value)) {
+                    thongBaoLoi("Hãy tự check số điện thoại");
+                } else {
+                    let lSUser = localStorage.getItem("user_them");
+                    let dsUser;
+
+                    let userSua = {};
+                    dsUser = JSON.parse(lSUser);
+                    dsUser.some((element, index) => {
+                        if (element["id"] == id) {
+                            userSua = {
+                                id: id,
+                                ten: ten.value,
+                                email: email.value,
+                                sdt: sdt.value,
+                                pass: pass.value,
+                                tinh: tinh.value,
+                                huyen: huyen.value,
+                                xa: xa.value,
+                                nha: nha.value
+                            };
+                            dsUser[index] = userSua;
+                            return true;
+                        }
+                    });
+                    let NSXJSON = JSON.stringify(dsUser);
+
+                    localStorage.setItem("user_them", NSXJSON);
+                    thongBao("Sửa thông tin thành công!");
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

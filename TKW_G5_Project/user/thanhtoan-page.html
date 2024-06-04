@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="includes/thanhtoan-page.css">
+    <title>Thanh toán</title>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <a href="../index.html">
+                <img class="logo" src="../user/imgs/logo.avif" height="70">
+            </a>
+
+            <a href="#"><i class="fa-solid fa-bag-shopping"></i></a>
+        </div>
+    </header>
+
+    <main>
+        <div class="container-left">
+            <form action="">
+                <table>
+                    <tr>
+                        <td>
+                            <span id="noti"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Liên hệ</th>
+                        <th><a href="#" id="login">Đăng nhập</a></th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><input type="email" placeholder="Email" id="lienhe"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><input type="checkbox"> Gửi cho tôi tin tức và ưu đãi qua email</td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2">Thông tin đơn hàng</th>
+                    </tr>
+
+                    <tr>
+                        <td><input type="text" placeholder="Họ và tên" id="hoten"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"><input type="text" placeholder="Địa chỉ" id="diachi"></td>
+                    </tr>
+
+                    <tr>
+                        <td><input type="text" placeholder="Thành phố" id="thanhpho"></td>
+                        <td><input type="text" placeholder="Mã bưu chính" id="buuchinh"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="phone-number">
+                                <input type="text" placeholder="Điện thoại" type="tel" id="dienthoai">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2">Phương thức vận chuyển</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="ptvc">
+                                <select id="shipping-method">
+                                    <option value="standard">Tiêu chuẩn</option>
+
+                                </select>
+                                <span class="option-price" id="option-price">35.000 ₫</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2">Thanh toán</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">Toàn bộ các giao dịch được bảo mật và mã hóa</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div class="thanhtoan-online">
+                                <input type="radio" id="tt-online" name="thanhtoan">
+                                <label for="tt-online">Thanh toán online qua các cổng
+                                    <i class="fa-brands fa-paypal"></i>
+                                    <i class="fa-brands fa-google-pay"></i>
+                                    <i class="fa-brands fa-cc-apple-pay"></i>
+                                    <i class="fa-regular fa-credit-card"></i></label>
+                            </div>
+
+                            <div class="thanhtoan-tainha">
+                                <input type="radio" id="tt-tainha" name="thanhtoan" checked>
+                                <label for="tt-tainha">Thanh toán khi nhận hàng (COD)</label>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2">Địa chỉ thanh toán</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <input id="btn-pay" type="button" value="Thanh toán ngay" onclick="validateForm()">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <hr>
+
+        <div class="container-right">
+            <div class="magiamgia">
+                <input type="text" placeholder="Mã giảm giá hoặc thẻ quà tặng">
+                <button>Áp dụng</button>
+            </div>
+
+            <div class="giaca">
+                <h5>Tổng phụ</h5>
+                <span id="gia"></span>
+            </div>
+
+            <div class="giaca">
+                <h5>Vận chuyển</h5>
+                <span>35.000VND</span>
+            </div>
+
+            <div class="giaca">
+                <h3>Tổng</h3>
+                <span id="total"></span>
+            </div>
+        </div>
+    </main>
+    <script>
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+        function validateForm() {
+            let lienhe = $('#lienhe')[0];
+            let hoten = $('#hoten')[0];
+            let dienthoai = $('#dienthoai')[0];
+            let diachi = $('#diachi')[0];
+            let buuchinh = $('#buuchinh')[0];
+            if (isEmpty(lienhe.value) || isEmpty(hoten.value) || isEmpty(dienthoai.value) || isEmpty(diachi.value) || isEmpty(buuchinh.value)) {
+                thongBaoLoi("Hãy nhập đủ thông tin")
+            } else {
+                let regex_sdt = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
+                if (!regex_sdt.test(dienthoai.value)) {
+                    thongBaoLoi("Hãy tự check số điện thoại");
+                } else {
+                    alert("Đã mua hàng thành công!");
+                    sessionStorage.removeItem("cart");
+                    $('#gia')[0].innerHTML = '';
+                    let tien = 35000;
+                    $('#total')[0].innerHTML = '';
+                }
+            }
+        }
+
+        let sSCart;
+        $(document).ready(function () {
+            let id = localStorage.getItem("user_id");
+            if (!isEmpty(id)) {
+                let lSUser = localStorage.getItem("user_them");
+                let dsUserThem;
+                if (!isEmpty(lSUser)) {
+                    dsUserThem = JSON.parse(lSUser);
+                    let flag = false;
+                    let userHienTai;
+                    dsUserThem.some((element, index) => {
+                        if (element["id"] == id) {
+                            userHienTai = element;
+                            flag = true;
+                            return true;
+                        }
+                    });
+                    if (flag) {
+                        let lienhe = $('#lienhe')[0];
+                        let hoten = $('#hoten')[0];
+                        let dienthoai = $('#dienthoai')[0];
+                        // console.log(userHienTai["sdt"]);
+                        lienhe.value = userHienTai["email"];
+                        hoten.value = userHienTai["ten"];
+                        dienthoai.value = userHienTai["sdt"];
+                    }
+                }
+            }
+            sSCart = sessionStorage.getItem("cart");
+            if (!isEmpty(sSCart)) {
+                let cart = JSON.parse(sSCart);
+                let tong = 0;
+                cart.forEach(element => {
+                    tong += element["gia"] * element["soluong"];
+                });
+                $('#gia')[0].innerHTML = parseInt(tong).toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                $('#total')[0].innerHTML = parseInt(tong + 35000).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+            }
+        });
+
+        $(document).ready(function () {
+            var loginButton = document.getElementById("login");
+            let id = localStorage.getItem("user_id");
+            loginButton.addEventListener('click', () => {
+                if (!isEmpty(id)) {
+                    alert("Bạn đã đăng nhập");
+                }
+                else window.location.href = '../user/signIn-signUp/signIn-Up.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

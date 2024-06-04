@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../includes/style.css">
+    <link rel="stylesheet" href="../product_detail/style.css">
+    <script src="../product_detail/index.js"></script>
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../product_detail/review-content.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Home</title>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="../index.html">
+                <img class="logo" src="../user/imgs/logo.avif">
+            </a>
+            <ul class="links">
+                <li class="hideMenuBar"><a class="active-menu" href="#">Home</a></li>
+                <li class="hideMenuBar"><a href="/user/about-page.html">About</a></li>
+                <li class="hideMenuBar"><a href="/user/contact-page.html">Contact</a></li>
+                <li class="hideMenuBar">
+                    <a href="/user/index.html" id="store">Store</a>
+                </li>
+            </ul>
+
+            <ul class="ults">
+                <li class="hideMenuBar">
+                    <a onclick="dieuHuongUser()">
+                        <div class="login-btn">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="hideMenuBar">
+                    <a>
+                        <div class="search_btn">
+                            <input type="text" placeholder="Search" class="search-text" required>
+                            <button class="nut-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="hideMenuBar">
+                    <a>
+                        <div class="cart-btn">
+                            <i class="fa-solid fa-cart-shopping" onclick="moCart()" id="cart-icon"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li onclick="showSidebar()" class="btn-menu">
+                    <a>
+                        <div class="menubar">
+                            <i class="fa-solid fa-bars" id="menubar"></i>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+
+            <!-- Side bar menu -->
+            <ul class="sidebar">
+                <li onclick="hideSideBar()"><a href="#"><i class="fa-solid fa-xmark"></i></a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="/user/about-page.html">About</a></li>
+                <li><a href="/user/contact-page.html">Contact</a></li>
+                <li><a href="#">Store</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="../user/cart-page.html">Shopping cart</a></li>
+            </ul>
+
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="product-info">
+                <div class="row">
+                    <div class="col-md-4">
+                        <figure class="zoom" id="zoom-hinh-truoc"
+                            style="background:url('../admin/imgs/products/0_truoc.webp')" onmousemove="zoom(event)"
+                            ontouchmove="zoom(event)">
+                            <img id="hinh_truoc" src="../admin/imgs/products/0_truoc.webp"
+                                alt="mo ta san pham mat truoc" style="height: 100%; width: 100%;">
+                        </figure>
+                    </div>
+                    <div class="col-md-4" style="display: flex; justify-content: center; align-items: center;">
+                        <div>
+                            <h3 id="ten"></h3>
+                            Giá:
+                            <span class="price" id="gia">
+                                500.000
+                            </span>
+
+                            <div class="detail-product">
+                                <h4>Mô tả sản phẩm</h4>
+                                <span id="mota">abcxyz</span>
+                            </div>
+                            <hr class="product-info-break" style="
+                            height: 4px;
+                            background: #000000 !important;
+                            margin: 50px 0 20px;">
+                            <button onclick="themVaoGioHang()" class="btn btn-warning"
+                                style=" width: 60%; color: #000000; text-transform: uppercase; font-weight: bolder;">
+                                Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping fa-xl"
+                                    style="color: #000000;"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4" id="zoom-2">
+                        <figure class="zoom" id="zoom-hinh-sau"
+                            style="background:url('../admin/imgs/products/0_sau.webp')" onmousemove="zoom(event)"
+                            ontouchmove="zoom(event)">
+                            <img role="presentation" id="hinh_sau" src="../admin/imgs/products/0_sau.webp"
+                                alt="mo ta san pham mat sau" style="height: 100%; width: 100%;">
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- rate-product -->
+        <!-- <div class="container">
+            <hr class="product-info-break" style="
+            height: 0px;
+            background: #000000 !important;">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="previous-rate"><i class="fa-solid fa-chevron-left fa-xl" style="color: #d1d1d1;"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="rate-product">
+                        <div class="review-container">
+                            <div class="review-header d-flex align-items-center">
+                                <img src="img/clothes-1.jpg" alt="User Avatar" class="mr-3">
+                                <div class="username">Nguyễn Văn A</div>
+                                <div class="rating ml-auto">
+                                    <i class="fa-regular fa-star" style="color: #a3a3a3;"></i>
+                                    <i class="fa-regular fa-star" style="color: #a3a3a3;"></i>
+                                    <i class="fa-regular fa-star" style="color: #a3a3a3;"></i>
+                                    <i class="fa-regular fa-star" style="color: #a3a3a3;"></i>
+                                    <i class="fa-regular fa-star" style="color: #a3a3a3;"></i>
+                                </div>
+                            </div>
+                            <div class="review-content mt-3">
+                                <div>Tiêu đề nội dung </div>
+                                <p>nội udng</p>
+                            </div>
+                            <div class="review-footer mt-3 pt-3 border-top">
+                                <div class="response">
+                                    <div class="response-title">Phản hồi của người bán: </div>
+                                    <p>nội dung</p>
+                                </div>
+                            </div>
+                            <div class="review-helpful text-right mt-3">
+                                Đánh giá này có hữu ích không?
+                                <button class="btn btn-outline-primary"><i class="fa-regular fa-thumbs-up"
+                                        style="color: #0000ff;"></i> Có</button>
+                                <button class="btn btn-outline-secondary"><i
+                                        class="fa-regular fa-thumbs-up fa-flip-vertical" style="color: #ff0000;"></i>
+                                    Không</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="next-rate"><i class="fa-solid fa-chevron-left fa-flip-horizontal fa-xl"
+                            style="color: #d1d1d1;"></i></div>
+                </div>
+                <div class="rate-next-previous-sub">
+                    <div class="col-12" style="text-align: center; padding: 10px;">
+                        <span><i class="fa-solid fa-chevron-left fa-xl"
+                                style="color: #d1d1d1; font-size: 50px;"></i></span>
+                        <span><i class="fa-solid fa-chevron-left fa-flip-horizontal fa-xl"
+                                style="color: #d1d1d1; font-size: 50px;"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </main>
+
+    <footer>
+        <div class="container-footer">
+            <div class="footer_1">
+                <a href="index.html">
+                    <img class="logo" src="../user/imgs/logo.avif">
+                </a>
+                <p>Thương hiệu thời trang số một Việt Nam.</p>
+                <div class="f_icon">
+                    <i class="fa-brands fa-facebook"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                    <i class="fa-brands fa-tiktok"></i>
+                </div>
+            </div>
+
+            <div class="footer_2">
+                <h3>SHOPPING</h3>
+                <a href="index.html">Home Page</a>
+                <a href="index.html">About</a>
+                <a href="index.html">Contact</a>
+                <a href="index.html">Store</a>
+            </div>
+
+            <div class="footer_3">
+                <h3>HỖ TRỢ</h3>
+                <a href="#">Chính sách</a>
+                <a href="#">Liên hệ với chúng tôi</a>
+                <a href="#">Phương thức thanh toán</a>
+                <a href="#">Vận chuyển</a>
+            </div>
+
+            <div class="footer_4">
+                <hr>
+                <h3>Đăng ký nhận bản tin</h3>
+                <input id="input_email" type="email" placeholder="Email của bạn">
+                <input id="input_sub" type="button" value="Đăng ký">
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="../admin/datas/sanpham.js"></script>
+    <script>
+        let data;
+        let id;
+        let ten;
+        let gia;
+        let mota;
+        let mat_truoc;
+        let mat_sau;
+        let zoom_hinh_truoc;
+        let zoom_hinh_sau;
+        $(document).ready(function () {
+            let urlParams = new URLSearchParams(document.location.search);
+            id = urlParams.get('id');
+            data = arraySanPham;
+            ten = $('#ten')[0];
+            gia = $('#gia')[0];
+            mota = $('#mota')[0];
+            mat_truoc = $('#hinh_truoc')[0];
+            mat_sau = $('#hinh_sau')[0];
+            zoom_hinh_truoc = $('#zoom-hinh-truoc')[0];
+            zoom_hinh_sau = $('#zoom-hinh-sau')[0];
+            themDuLieu(data);
+        });
+
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+
+        function layDuongDan(giaTri) {
+            giaTri = giaTri.split("/").pop();
+            return giaTri;
+        }
+        function taoThongTinSSCart(id, ten, gia, hinh) {
+            let phanTuCartMoi = {
+                id: id,
+                soluong: 1,
+                ten: ten,
+                gia: gia,
+                hinh: hinh
+            };
+            return phanTuCartMoi;
+        }
+
+        function themVaoGioHang() {
+            let sSCart = sessionStorage.getItem("cart");
+            let cart;
+            let phanTuCartMoi;
+            if (!isEmpty(sSCart)) {
+                cart = JSON.parse(sSCart);
+                let flag = true;
+                cart.some((element, index) => {
+                    if (element["id"] == id) {
+                        element["soluong"] += 1;
+                        flag = false;
+                        return true;
+                    }
+                });
+                if (flag) {
+                    phanTuCartMoi = taoThongTinSSCart(id, ten.innerHTML, gia.innerHTML, luuHinh);
+                    console.log(phanTuCartMoi);
+                    cart.push(phanTuCartMoi);
+                }
+            } else {
+                cart = [];
+                phanTuCartMoi = taoThongTinSSCart(id, ten.innerHTML, gia.innerHTML, luuHinh);
+                cart.push(phanTuCartMoi);
+            }
+            let NSXJSON = JSON.stringify(cart);
+            sessionStorage.setItem("cart", NSXJSON);
+            alert("Đã thêm vào giỏ hàng");
+        }
+        let luuHinh;
+
+        function themDuLieu(data) {
+            let lST = localStorage.getItem("sp_them");
+            let dsThem;
+            if (!isEmpty(lST)) {
+                dsThem = JSON.parse(lST);
+                for (let i = dsThem.length - 1; i >= 0; i--) {
+                    data.push(dsThem[i]);
+                }
+            }
+
+            let lSS = localStorage.getItem("sp_sua");
+            if (!isEmpty(lSS)) {
+                dsSua = JSON.parse(lSS);
+                dsSua.some((element, index) => {
+                    data.some((dt, i) => {
+                        if (element["id"] == dt["id"]) {
+                            data[i] = dsSua[index];
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            let lSX = localStorage.getItem("sp_xoa");
+            if (!isEmpty(lSX)) {
+                dsXoa = JSON.parse(lSX);
+                dsXoa.forEach(element => {
+                    data.some((dt, i) => {
+                        if (element == dt["id"]) {
+                            data.splice(i, 1);
+                            return true;
+                        }
+                    });
+                });
+            }
+            //--
+            data.some((dt, i) => {
+                if (dt["id"] == id) {
+                    ten.innerHTML = dt["ten"];
+                    gia.innerHTML = dt["dongia"];
+                    let mt = dt["mota"];
+                    mt = mt.replace(/\n/g, '<br>');
+                    // console.log
+                    mota.innerHTML = mt;
+
+                    luuHinh = layDuongDan(dt["hinh_truoc"]);
+                    let srctr = "../admin/imgs/products/" + layDuongDan(dt["hinh_truoc"]);
+                    mat_truoc.src = srctr;
+                    zoom_hinh_truoc.style.backgroundImage = `url('${srctr}')`;
+
+                    let srcsa = "../admin/imgs/products/" + layDuongDan(dt["hinh_truoc"]);
+                    mat_sau.src = srcsa;
+                    zoom_hinh_sau.style.backgroundImage = `url('${srcsa}')`;
+                    return false;
+                }
+            });
+        }
+
+        function moCart(){
+            window.location.href = "../user/cart-page.html";
+        }
+
+        function dieuHuongUser() {
+        let id = localStorage.getItem("user_id");
+        if (!isEmpty(id)) {
+            window.location.href = '../user/information/infor.html';
+        } else {
+            window.location.href = '..//user/signIn-signUp/signIn-Up.html';
+        }
+    }
+    </script>
+</body>
+
+</html>

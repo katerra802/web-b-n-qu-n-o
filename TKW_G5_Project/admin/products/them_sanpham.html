@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../includes/form.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <form class="form" method="post" action="" enctype="multipart/form-data">
+            <div class="div_form">
+                <h1>
+                    Thêm sản phẩm
+                </h1>
+                <span id="noti"></span>
+                <h2>Tên:</h2>
+                <input type="text" class="input" id="ten" name="ten" placeholder="Tên sản phẩm">
+                <h2>Giá:</h2>
+                <input type="number" class="input" id="gia" name="gia" value="" placeholder="Giá tiền">
+                <h2>Số lượng:</h2>
+                <input type="number" class="input" name="soluong" id="soluong" value=""
+                    placeholder="Số lượng sản phẩm nhập">
+                <h2>Mô tả:</h2>
+                <textarea type="text" class="input" name="mota" id="mota" placeholder="Mô tả sản phẩm"></textarea>
+                <h2>Thương hiệu</h2>
+                <select name="nhasanxuat" id="nhasanxuat">
+                </select>
+                <h2>Loại sản phẩm:</h2>
+                <select name="loai" id="loaihang"></select>
+                <h2>Hình mặt trước:</h2>
+                <input type="file" name="new_image" id="hinh_mat_truoc">
+                <!-- <img src="images/1690098769.webp" height="120px">
+                <input type="hidden" value="1690098769.webp" name="old_image"> -->
+                <h2>Hình mặt sau:</h2>
+                <input type="file" name="new_image" id="hinh_mat_sau">
+                <button type="button" onclick="validateInputForm()">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <script src="../datas/sanpham.js"></script>
+    <script src="../datas/loaihang.js"></script>
+    <script src="../datas/nhasanxuat.js"></script>
+    <script>
+        let dataSanPham;
+        let dataLoaiHang;
+        let dataNhaSanXuat;
+        let inpTen = $('#ten')[0];
+        let inpGia = $('#gia')[0];
+        let inpLoaiHang = $('#loaihang')[0];
+        let inpNhaSanXuat = $('#nhasanxuat')[0];
+        let inpSoLuong = $('#soluong')[0];
+        let inpMoTa = $('#mota')[0];
+        let inpHinhMT = $('#hinh_mat_truoc')[0];
+        let inpHinhMS = $('#hinh_mat_sau')[0];
+        $(document).ready(function () {
+            dataSanPham = arraySanPham;
+            dataLoaiHang = arrayLoaiHang;
+            dataNhaSanXuat = arrayNhaSanXuat;
+
+            let lST = localStorage.getItem("nsx_them");
+            let dsNSXThem;
+            if (!isEmpty(lST)) {
+                dsNSXThem = JSON.parse(lST);
+                for (let i = dsNSXThem.length - 1; i >= 0; i--) {
+                    dataNhaSanXuat.push(dsNSXThem[i]);
+                }
+            }
+
+            let lSS = localStorage.getItem("nsx_sua");
+            if (!isEmpty(lSS)) {
+                dsNSXSua = JSON.parse(lSS);
+                dsNSXSua.some((element, index) => {
+                    dataNhaSanXuat.some((dt, i) => {
+                        if (element["id"] == dt["id"]) {
+                            dataNhaSanXuat[i] = dsNSXSua[index];
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            let lSX = localStorage.getItem("nsx_xoa");
+            if (!isEmpty(lSX)) {
+                dsNSXXoa = JSON.parse(lSX);
+                dsNSXXoa.forEach(element => {
+                    dataNhaSanXuat.some((dt, i) => {   
+                        if (element == dt["id"]) {
+                            dataNhaSanXuat.splice(i,1);
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            for (let i = 0; i < dataNhaSanXuat.length; i++) {
+                var newOption = document.createElement("option");
+                newOption.text = dataNhaSanXuat[i]["ten"];
+                inpNhaSanXuat.add(newOption);
+            }
+
+            for (let i = 0; i < dataLoaiHang.length; i++) {
+                var optgroup = document.createElement("optgroup");
+                optgroup.label = dataLoaiHang[i]["danhmuc"];
+                dataLoaiHang[i]["loaihang"].forEach(element => {
+                    var option = document.createElement("option");
+                    option.value = element;
+                    option.text = element;
+                    optgroup.appendChild(option);
+                });
+                inpLoaiHang.appendChild(optgroup);
+            }
+        });
+
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+        function layDuongDanTuongDoi(giaTri) {
+            giaTri = giaTri.split("\\").pop();
+            return "../imgs/products/" + giaTri;
+        }
+        function layDanhMuc(giaTri) {
+            switch (giaTri.split("-").shift()) {
+                case "ao":
+                    return "Áo";
+                case "quan":
+                    return "Quần";
+                case "phukien":
+                    return "Phụ kiện";
+            }
+        }
+
+        function validateInputForm() {
+            if (isEmpty(inpTen.value) || isEmpty(inpGia.value) || isEmpty(inpSoLuong.value) || isEmpty(inpHinhMT.value) || isEmpty(inpHinhMS.value)) {
+                thongBaoLoi("Hãy nhập đầy đủ thông tin");
+            } else if (inpGia.value < 0 || inpSoLuong.value < 0) {
+                thongBaoLoi("Các giá trị số không thể âm");
+            } else {
+                let hinh_truoc = layDuongDanTuongDoi(inpHinhMT.value);
+                let hinh_sau = layDuongDanTuongDoi(inpHinhMS.value);
+
+                let lS = localStorage.getItem("sp_them");
+                let dsSPThem;
+
+                let spMoi = {};
+                if (!isEmpty(lS)) {
+                    dsSPThem = JSON.parse(lS);
+                    spMoi = {
+                        id: dsSPThem[0]["id"] + 1,
+                        ten: inpTen.value,
+                        danhmuc: layDanhMuc(inpLoaiHang.value),
+                        loaihang: inpLoaiHang.value,
+                        nhasanxuat: inpNhaSanXuat.value,
+                        dongia: inpGia.value,
+                        tonkho: inpSoLuong.value,
+                        mota: inpMoTa.value,
+                        hinh_truoc: hinh_truoc,
+                        hinh_sau: hinh_sau
+                    };
+                    // console.log(spMoi);
+                } else {
+                    dsSPThem = [];
+                    spMoi = {
+                        id: dataSanPham[dataSanPham.length - 1]["id"] + 1,
+                        ten: inpTen.value,
+                        danhmuc: layDanhMuc(inpLoaiHang.value),
+                        loaihang: inpLoaiHang.value,
+                        nhasanxuat: inpNhaSanXuat.value,
+                        dongia: inpGia.value,
+                        tonkho: inpSoLuong.value,
+                        mota: inpMoTa.value,
+                        hinh_truoc: hinh_truoc,
+                        hinh_sau: hinh_sau
+                    };
+                }
+                dsSPThem.unshift(spMoi);
+                let NSXJSON = JSON.stringify(dsSPThem);
+
+                localStorage.setItem("sp_them", NSXJSON);
+
+                // alert("thong bao");
+                thongBao("Thêm thành công!");
+                inpTen.value = "";
+                inpGia.value = "";
+                inpMoTa.value = "";
+                inpSoLuong.value = "";
+                inpHinhMT.value = "";
+                inpHinhMS.value = "";
+            }
+        }
+    </script>
+</body>
+
+</html>

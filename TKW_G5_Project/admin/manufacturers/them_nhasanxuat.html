@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../includes/form.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <form class="form">
+            <div class="div_form">
+                <h1>
+                    Thêm nhà sản xuất
+                </h1>
+                <span id="noti"></span>
+                <h2>Tên:</h2>
+                <input type="text" class="input" id="ten" name="ten" placeholder="Tên nhà sản xuất">
+                <h2>Số điện thoại:</h2>
+                <input type="text" class="input" id="sdt" name="sdt" placeholder="Số điện thoại">
+                <h2>Địa chỉ:</h2>
+                <textarea type="text" class="input" id="diachi" name="diachi" placeholder="Địa chỉ"></textarea>
+                <h2>Logo:</h2>
+                <input type="file" name="logo" id="logo">
+                <!-- <img src="images/1690098769.webp" height="120px">
+                <input type="hidden" value="1690098769.webp" name="old_image"> -->
+                <button onclick="validateInputForm()" type="button">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <script src="../datas/nhasanxuat.js"></script>
+    <script>
+        let data = arrayNhaSanXuat;
+        let inputTen = $('#ten')[0];
+        let inputSdt = $('#sdt')[0];
+        let inputDiaChi = $('#diachi')[0];
+        let inputLogo = $('#logo')[0];
+        let id;
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+        function layDuongDanTuongDoi(giaTri) {
+            giaTri = giaTri.split("\\").pop();
+            return "../imgs/manufacturers/" + giaTri;
+        }
+        function validateInputForm() {
+            if (isEmpty(inputTen.value) || isEmpty(inputSdt.value) || isEmpty(inputDiaChi.value) || isEmpty(inputLogo)) {
+                thongBaoLoi("Hãy nhập đầy đủ thông tin");
+            } else {
+                let regex_sdt = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
+                if (!regex_sdt.test(inputSdt.value)) {
+                    thongBaoLoi("Hãy tự check số điện thoại");
+                } else {
+                    let logo = layDuongDanTuongDoi(inputLogo.value);
+
+                    let lS = localStorage.getItem("nsx_them");
+                    let manufacturers;
+
+                    let newManufacturer = {};
+                    if (!isEmpty(lS)) {
+                        manufacturers = JSON.parse(lS);
+                        newManufacturer = {
+                            id: manufacturers[0]["id"] + 1,
+                            ten: inputTen.value,
+                            sdt: inputSdt.value,
+                            diachi: inputDiaChi.value,
+                            logo: logo
+                        };
+                    } else {
+                        manufacturers = [];
+                        newManufacturer = {
+                            id: data[data.length-1]["id"] + 1,
+                            ten: inputTen.value,
+                            sdt: inputSdt.value,
+                            diachi: inputDiaChi.value,
+                            logo: logo
+                        };
+                    }
+                    manufacturers.unshift(newManufacturer);
+                    let NSXJSON = JSON.stringify(manufacturers);
+
+                    localStorage.setItem("nsx_them", NSXJSON);
+
+                    $('#ten')[0].value = "";
+                    $('#sdt')[0].value = "";
+                    $('#diachi')[0].value = "";
+                    $('#logo')[0].value = "";
+                    thongBao("Thêm thành công!");
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

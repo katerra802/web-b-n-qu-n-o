@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="../user/includes/cart-page.css">
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="../index.html">
+                <img class="logo" src="../user/imgs/logo.avif">
+            </a>
+            <!-- <ul class="links">
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="about-page.html">About</a></li>
+                <li><a href="contact-page.html">Contact</a></li>
+                <li>
+                    <a href="/user/index.html" id="store">Store</a>
+                    <div class="dropdown">
+                        <ul class="menu-inside">
+                            <li><a href="#">Quần áo nam</a></li>
+                            <li><a href="#">Quần áo nữ</a></li>
+                            <li><a href="#">Phụ kiện</a></li>
+                            <li><a href="#">Bộ sưu tập mùa hè</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul> -->
+        </div>
+    </header>
+
+    <main style="display: block; margin-top: 150px;">
+        <div class="shopping-cart">
+            <div class="cart-item">
+                <table id="table">
+                    <tr>
+                        <th colspan="2" style="text-align: left;">Tên</th>
+                        <th>Số lượng</th>
+                        <th>Tiền</th>
+                        <th></th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-total">
+                <div class="sale-code">
+                    <h3>Mã giảm giá</h3>
+                    <div>
+                        <input type="text" placeholder="Coupon code">
+                        <button>Áp dụng</button>
+                    </div>
+                </div>
+
+                <div class="bill">
+                    <h3>CART TOTAL</h3>
+                    <ul>
+                        <li>Tổng tiền <span id="total-price">0</span></li>
+                    </ul>
+                    <input type="button" value="Thanh toán" onclick="thanhToan()">
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="container-footer">
+            <div class="footer_1">
+                <img class="logo" src="../user/imgs/logo.avif">
+                <p>Thương hiệu thời trang số một.</p>
+                <div class="f_icon">
+                    <i class="fa-brands fa-facebook"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                    <i class="fa-brands fa-tiktok"></i>
+                </div>
+            </div>
+
+            <div class="footer_2">
+                <h3>SHOPPING</h3>
+                <a href="../index.html">Home Page</a>
+                <a href="../user/about-page.html">About</a>
+                <a href="../user/contact-page.html">Contact</a>
+                <a href="../user/find-products.html">Store</a>
+            </div>
+
+            <div class="footer_3">
+                <h3>HỖ TRỢ</h3>
+                <a href="#">Chính sách</a>
+                <a href="#">Liên hệ với chúng tôi</a>
+                <a href="#">Phương thức thanh toán</a>
+                <a href="#">Vận chuyển</a>
+            </div>
+
+            <div class="footer_4">
+                <hr>
+                <h3>Đăng ký nhận bản tin</h3>
+                <input id="input_email" type="email" placeholder="Email của bạn">
+                <input id="input_sub" type="button" value="Đăng ký">
+            </div>
+
+        </div>
+    </footer>
+</body>
+
+<script>
+    let table = $('#table')[0];
+    $(document).ready(function () {
+        hienThongTinCart();
+    });
+
+    function isEmpty(input) {
+        return (input == null || input.length == 0);
+    }
+
+    function hienThongTinCart() {
+        let sSCart = sessionStorage.getItem("cart");
+        table.innerHTML = '';
+        if (!isEmpty(sSCart)) {
+            let cart = JSON.parse(sSCart);
+            cart.forEach(element => {
+                const newRow = document.createElement('tr');
+
+                const imgCell = document.createElement('td');
+
+                const cartProductId = document.createElement('div');
+                cartProductId.className = 'id';
+                cartProductId.style.visibility = "hidden";
+                cartProductId.innerText = element["id"];
+                newRow.appendChild(cartProductId);
+
+                const img = document.createElement('img');
+                img.src = "../admin/imgs/products/" + element["hinh"];
+                img.alt = 'ao';
+                img.width = 100;
+                imgCell.appendChild(img);
+                newRow.appendChild(imgCell);
+
+                const infoCell = document.createElement('td');
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'info-item';
+
+                const productName = document.createElement('p');
+                productName.textContent = element["ten"];
+                const productPrice = document.createElement('p');
+                productPrice.className = 'gia'
+                productPrice.textContent = parseInt(element["gia"]).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                infoDiv.appendChild(productName);
+                infoDiv.appendChild(productPrice);
+                infoCell.appendChild(infoDiv);
+                newRow.appendChild(infoCell);
+
+                const quantityCell = document.createElement('td');
+                const cartQuantity = document.createElement('input');
+                cartQuantity.type = 'number';
+                cartQuantity.value = element["soluong"];
+                cartQuantity.className = 'soluong';
+                cartQuantity.addEventListener("change", thayDoiSoLuong);
+                quantityCell.appendChild(cartQuantity);
+                newRow.appendChild(quantityCell);
+
+                const totalCell = document.createElement('td');
+                const totalDiv = document.createElement('div');
+                totalDiv.className = 'tong';
+                totalDiv.textContent = parseInt(element["gia"]).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+                totalCell.appendChild(totalDiv);
+                newRow.appendChild(totalCell);
+
+                const deleteCell = document.createElement('td');
+                deleteCell.style.width = '70px';
+                deleteCell.style.textAlign = 'center';
+                const deleteIcon = document.createElement('i');
+                deleteIcon.className = 'fa-solid fa-xmark';
+                deleteIcon.addEventListener('click', xoaSPKhoiCart);
+                deleteCell.appendChild(deleteIcon);
+                newRow.appendChild(deleteCell);
+
+                table.appendChild(newRow);
+            });
+            tinhTongTien();
+        }
+    }
+
+    function thayDoiSoLuong(event) {
+        var input = event.target;
+        if (isNaN(input.value) || input.value <= 0) {
+            input.value = 1;
+        }
+        let soluong = input.value;
+        let id = event.target.parentElement.parentElement.firstChild.innerHTML;
+        let sSCart = sessionStorage.getItem("cart");
+        let cart;
+        if (!isEmpty(sSCart)) {
+            cart = JSON.parse(sSCart);
+            cart.forEach(element => {
+                if (element["id"] == id) {
+                    element["soluong"] = parseInt(soluong);
+                }
+            });
+        }
+        let NSXJSON = JSON.stringify(cart);
+        sessionStorage.setItem("cart", NSXJSON);
+        tinhTongTien();
+    }
+
+    function xoaSPKhoiCart(event) {
+        let id = event.target.parentElement.parentElement.firstChild.innerHTML;
+        console.log(id);
+
+        let sSCart = sessionStorage.getItem("cart");
+        let cart = JSON.parse(sSCart);
+        cart.forEach((element, index) => {
+            console.log(element["id"] + " " + id);
+            if (element["id"] == id) {
+                console.log(cart + id);
+                cart.splice(index, 1);
+            }
+        });
+        let NSXJSON = JSON.stringify(cart);
+        sessionStorage.setItem("cart", NSXJSON);
+        event.target.parentElement.parentElement.remove();
+    }
+
+    function tinhTongTien() {
+        let cartboxes = $("tr");
+        // console.log(cartboxes);
+        var tong = 0;
+        for (let i = 0; i < cartboxes.length; i++) {
+            let cartbox = cartboxes[i];
+            let priceElement = $(".gia")[i];
+            let quatityElement = $(".soluong")[i];
+            // console.log(quatityElement);
+            let numberString = priceElement.innerHTML.replace(/[^0-9]/g, '');
+            let price = parseInt(numberString, 10);
+            let quantity = quatityElement.value;
+            let tien = price * quantity;
+            $('.tong')[i].innerHTML = parseInt(tien).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+            tong = tong + tien;
+        }
+        $('#total-price')[0].innerHTML = parseInt(tong).toLocaleString('it-IT', { style: 'currency', currency: 'VND' });
+    }
+
+    function thanhToan(){
+        window.location.href='../user/thanhtoan-page.html';
+    }
+</script>
+
+</html>

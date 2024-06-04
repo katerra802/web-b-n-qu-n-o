@@ -1,0 +1,64 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    background-color: #000;
+    background-image: url('https://images.pexels.com/photos/1421903/pexels-photo-1421903.jpeg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    background-attachment: fixed;
+}
+
+.register-container {
+    opacity: 2;
+    background: rgb(85, 84, 84, 0.5);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 450px;
+}
+
+.register-container h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.social-btn {
+    margin-bottom: 1rem;
+}
+
+.logo {
+    margin: 0 auto;
+    height: 50px;
+    width: 150px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: white;
+}
+
+.or-divider::before, .or-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.or-divider::before {
+    margin-right: .25em;
+}
+
+.or-divider::after {
+    margin-left: .25em;
+}
+
+label {
+    color: white;
+}

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In/Sign Up</title>
+    <link rel="stylesheet" href="../signIn-signUp/signIn-Up.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Tạo tài khoản</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>Nhấn vào link bên dưới để đến trang đăng ký</span>
+                <button style="width: 162px; height: 38px; padding: 0;"><a href="../SignUp/signUp.html"
+                        style="color: white; padding: 10px 40px;">Đăng ký</a></button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Đăng nhập</h1>
+                <div class="social-container">
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>Hoặc tài khoản riêng của bạn</span>
+                <span id="noti"></span>
+                <input type="email" placeholder="Email" id="email" required />
+                <input type="password" placeholder="Password" id="pass" required />
+                <a href="#">Bạn quên mật khẩu?</a>
+                <button type="button" style="width: 162px; height: 38px; padding: 0;"><a onclick="dangNhap()"
+                        style="color: white; padding: 10px">Đăng nhập</a></button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Chào mừng quay chở lại!</h1>
+                    <p>Đăng nhập và trải nghiệm mua hàng nào!!!</p>
+                    <button class="ghost" id="signIn">Đăng nhập</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Xin chào! Bạn chưa có tài khoản?</h1>
+                    <p>Hãy tạo tài khoản để mua sắm cùng chúng tôi!!!</p>
+                    <button class="ghost" id="signUp">Đăng ký</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../signIn-signUp/signIn-Up.js"></script>
+    <script>
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+
+        let email = $('#email')[0];
+        let pass = $('#pass')[0];
+
+        function dangNhap() {
+            if (isEmpty(email.value) || isEmpty(pass.value)) {
+                thongBaoLoi("Hãy nhập đủ thông tin");
+            } else {
+                let lSUser = localStorage.getItem("user_them");
+                let dsUser;
+                let flag = false;
+                let user;
+                if (!isEmpty(lSUser)) {
+                    dsUser = JSON.parse(lSUser);
+                    dsUser.some((element, index) => {
+                        if (element["email"] == email.value && element["pass"] == pass.value) {
+                            user=element;
+                            flag = true;
+                            return true;
+                        }
+                    });
+                }
+                if(!flag){
+                    thongBaoLoi("Sai thông tin đăng nhập");
+                } else {
+                    localStorage.setItem("user_id", user["id"]);
+                    window.location.href = '../../index.html';
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            let id = localStorage.getItem("user_id");
+            if(!isEmpty(id)){
+                event.preventDefault();
+                window.location.href = '../../index.html';
+            }
+        });
+    </script>
+</body>
+
+</html>

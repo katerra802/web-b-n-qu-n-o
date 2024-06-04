@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../includes/styles.css" />
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <script src="../includes/scripts.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Sản phẩm</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="content-header">
+                <span>
+                    <h4>
+                        Sản Phẩm
+                    </h4>
+                </span>
+                <a class="button-a" onclick="changeFrameSrc('themSanPham')">
+                    Thêm sản phẩm
+                </a>
+            </div>
+            <div class="content-action">
+                <form class="search-form">
+                    <input placeholder="Tìm kiếm" type="search" name="search" id="search">
+                    <a onclick="timKiem()">
+                        <i class="fa-solid fa-magnifying-glass black"></i>
+                    </a>
+                </form>
+                <!-- <ul class="ults-bar">
+                    <li>
+                        <a href="#">
+                            <i class="fa-solid fa-filter fa-hover"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa-solid fa-list fa-hover"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa-solid fa-table-cells fa-hover"></i>
+                        </a>
+                    </li>
+                </ul> -->
+            </div>
+            <div class="table-div">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <h4>
+                                    Mã
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Ảnh
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Tên
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Loại hàng
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Nhà sản xuất
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Đơn giá
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Tồn kho
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Sửa
+                                </h4>
+                            </th>
+                            <th>
+                                <h4>
+                                    Xoá
+                                </h4>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../datas/sanpham.js"></script>
+    <script>
+        let search;
+        let data;
+        $(document).ready(function () {
+            let urlParams = new URLSearchParams(document.location.search);
+            search = urlParams.get('search');
+            data = arraySanPham;
+            themDuLieu(data)   
+        });
+
+        function timKiem(){
+            search = $('#search')[0].value;
+            window.location="index.html?search=" + search;
+        }
+
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+
+        function themDuLieu(data) {
+            let lST = localStorage.getItem("sp_them");
+            let dsThem;
+            if (!isEmpty(lST)) {
+                dsThem = JSON.parse(lST);
+                for (let i = dsThem.length - 1; i >= 0; i--) {
+                    data.push(dsThem[i]);
+                }
+            }
+
+            let lSS = localStorage.getItem("sp_sua");
+            if (!isEmpty(lSS)) {
+                dsSua = JSON.parse(lSS);
+                dsSua.some((element, index) => {
+                    data.some((dt, i) => {
+                        if (element["id"] == dt["id"]) {
+                            data[i] = dsSua[index];
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            let lSX = localStorage.getItem("sp_xoa");
+            if (!isEmpty(lSX)) {
+                dsXoa = JSON.parse(lSX);
+                dsXoa.forEach(element => {
+                    data.some((dt, i) => {   
+                        if (element == dt["id"]) {
+                            data.splice(i,1);
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            var tbody = $('#table')[0];
+
+            for (var i = 0; i < data.length; i++) {
+                if(!isEmpty(search)){
+                    if (!data[i]["ten"].toLowerCase().includes(search.toLowerCase())){
+                        continue;
+                    }
+                }
+                var tr = document.createElement('tr');
+
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                var td3 = document.createElement('td');
+                var td4 = document.createElement('td');
+                var td5 = document.createElement('td');
+                var td6 = document.createElement('td');
+                var td7 = document.createElement('td');
+                var td8 = document.createElement('td');
+                var td9 = document.createElement('td');
+
+                td1.textContent = data[i]["id"];
+
+                var img = document.createElement('img');
+                img.src = data[i]["hinh_truoc"];
+                td2.appendChild(img);
+
+                td3.textContent = data[i]["ten"];
+                td4.textContent = data[i]["loaihang"];
+                td5.textContent = data[i]["nhasanxuat"];
+                td6.textContent = data[i]["dongia"].toLocaleString('it-IT');
+                td7.textContent = data[i]["tonkho"];
+
+                var aSua = document.createElement('a');
+                aSua.href = 'sua_sanpham.html?id=' + i;
+                aSua.textContent = 'Sửa';
+                td8.appendChild(aSua);
+
+                var aXoa = document.createElement('a');
+                aXoa.href = 'xoa_sanpham.html?id=' + i;
+                aXoa.textContent = 'Xoá';
+                td9.appendChild(aXoa);
+
+                // Thêm ô vào hàng
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
+                tr.appendChild(td6);
+                tr.appendChild(td7);
+                tr.appendChild(td8);
+                tr.appendChild(td9);
+
+                // Thêm hàng vào tbody
+                tbody.appendChild(tr);
+            }
+        }
+    </script>
+</body>
+
+</html>

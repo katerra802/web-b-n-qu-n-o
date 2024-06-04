@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../includes/form.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <section>
+        <form class="form">
+            <div class="div_form">
+                <h1>
+                    Sửa nhà sản xuất
+                </h1>
+                <span id="noti"></span>
+                <h2>Tên:</h2>
+                <input type="text" class="input" id="ten" name="ten" placeholder="Tên nhà sản xuất">
+                <h2>Số điện thoại:</h2>
+                <input type="text" class="input" id="sdt" name="sdt" placeholder="Số điện thoại">
+                <h2>Địa chỉ:</h2>
+                <textarea type="text" class="input" id="diachi" name="diachi" placeholder="Địa chỉ"></textarea>
+                <h2>Giữ Logo cũ:</h2>
+                <img src="" id="hinh_cu" height="120px">
+                <input type="hidden" value="" id="old_image" name="old_image">
+                <h2>Hoặc chọn Logo mới:</h2>
+                <input type="file" name="logo" id="logo">
+                <button onclick="validateInputForm()" type="button">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <script src="../datas/nhasanxuat.js"></script>
+    <script>
+        let inputTen = $('#ten')[0];
+        let inputSdt = $('#sdt')[0];
+        let inputDiaChi = $('#diachi')[0];
+        let inputLogoCu = $('#hinh_cu')[0];
+        let inputLogoMoi = $('#logo')[0];
+        let data = arrayNhaSanXuat;
+        let id;
+        $(document).ready(function () {
+            let lST = localStorage.getItem("nsx_them");
+            let manufacturers;
+            if (!isEmpty(lST)) {
+                manufacturers = JSON.parse(lST);
+                // console.log(manufacturers);
+                for (let i = manufacturers.length - 1; i >= 0; i--) {
+                    data.push(manufacturers[i]);
+                }
+            }
+
+            let lSS = localStorage.getItem("nsx_sua");
+            if (!isEmpty(lSS)) {
+                manufacturers = JSON.parse(lSS);
+                manufacturers.some((element, index) => {
+                    data.some((dt, i) => {
+                        if (element["id"] == dt["id"]) {
+                            data[i] = manufacturers[index];
+                            return true;
+                        }
+                    });
+                });
+            }
+
+            
+            // themDuLieu(data.length, data)
+            let urlParams = new URLSearchParams(document.location.search);
+            id = urlParams.get('id');
+            inputTen.value = data[id]["ten"];
+            inputSdt.value = data[id]["sdt"];
+            inputDiaChi.value = data[id]["diachi"];
+            inputLogoCu.src = data[id]["logo"];
+
+        });
+
+        let noti = $('#noti')[0];
+        function thongBaoLoi(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "red";
+        }
+        function thongBao(giaTri) {
+            noti.innerHTML = giaTri;
+            noti.style.color = "lime";
+        }
+        function isEmpty(input) {
+            return (input == null || input.length == 0);
+        }
+        function layDuongDanTuongDoi(giaTri) {
+            giaTri = giaTri.split("\\").pop();
+            return "../imgs/manufacturers/" + giaTri;
+        }
+
+        function kiemTraNSX(a) {
+            if (a.ten != data[a.id].ten || a.sdt != data[a.id].sdt || a.diachi != data[a.id].diachi || a.logo != data[a.id].logo) return true;
+            return false;
+        }
+
+        function validateInputForm() {
+            if (isEmpty(inputTen.value) || isEmpty(inputSdt.value) || isEmpty(inputDiaChi.value)) {
+                thongBaoLoi("Hãy nhập đầy đủ thông tin");
+            } else {
+                let regex_sdt = /^(84|0[3|5|7|8|9])+([0-9]{8})$/;
+                if (!regex_sdt.test(inputSdt.value)) {
+                    thongBaoLoi("Hãy tự check số điện thoại");
+                } else {
+                    let logo = data[id]["logo"];
+                    if (!isEmpty(inputLogoMoi.value)) {
+                        logo = layDuongDanTuongDoi(inputLogoMoi.value);
+                    }
+
+                    let newManufacturer = {
+                        id: id,
+                        ten: inputTen.value,
+                        sdt: inputSdt.value,
+                        diachi: inputDiaChi.value,
+                        logo: logo
+                    };
+
+                    if (kiemTraNSX(newManufacturer)) { //Khác nhau thì mới lưu
+                        let lS = localStorage.getItem("nsx_sua");
+                        let manufacturers
+                        if (!isEmpty(lS)) {
+                            manufacturers = JSON.parse(lS);
+                        } else {
+                            manufacturers = [];
+                        }
+
+                        let flag = 1;
+
+                        if (manufacturers != []) {
+                            manufacturers.some((element, index) => {
+                                if (element["id"] == newManufacturer["id"]) {
+                                    manufacturers[index] = newManufacturer;
+                                    flag = false;
+                                    return true;
+                                }
+                            });
+                            if (flag) {
+                                manufacturers.unshift(newManufacturer);
+                            }
+                        } else {
+                            manufacturers.unshift(newManufacturer);
+                        }
+                        let NSXJSON = JSON.stringify(manufacturers);
+
+                        localStorage.setItem("nsx_sua", NSXJSON);
+                    }
+                    thongBao("Sửa thành công!");
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

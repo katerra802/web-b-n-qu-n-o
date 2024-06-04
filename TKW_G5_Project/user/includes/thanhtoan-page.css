@@ -1,0 +1,196 @@
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: black;
+    color: #fff;
+}
+
+header{
+    border-bottom: 2px solid;
+}
+
+.header{
+    max-width: 550px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.fa-bag-shopping{
+    font-size: 30px;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+main>hr{
+    width: 2px;
+    background-color: #fff;
+    margin:0;
+    opacity: 1;
+}
+
+.container-left{
+    margin-top: 50px;
+}
+
+table tr th a{
+    float: right;
+}
+
+table tr{
+    line-height: 20px;
+}
+
+table tr th{
+    font-size: larger;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+table tr td{
+    padding: 10px 15px;
+}
+
+table tr td input[type = "text"]{
+    padding: 10px 20px;
+    width: 100%;
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid gray;
+    border-radius: 3px;
+}
+
+.chon-quocgia{
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding:20px 10px;
+}
+
+.chon-quocgia>select#country{
+    background-color: black;
+    color: #fff;
+    float: right;
+    border: none;
+}
+
+.phone-number{
+    position: relative;
+}
+
+.phone-number>i{
+    float: right;
+    position: absolute;
+    right: 10px;
+    transform: translateY(13px);
+}
+
+.ptvc{
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding:20px 10px;
+}
+
+.ptvc>select#shipping-method{
+    background-color: black;
+    color: #fff;
+    border: none;
+}
+
+.ptvc>span{
+    float: right;
+}
+
+.thanhtoan-online{
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding:20px 10px;
+}
+
+.thanhtoan-online i{
+    font-size: larger;
+}
+
+.fa-paypal{
+    color: blue;
+}
+
+.fa-google-pay{
+    color: red;
+}
+
+.fa-cc-apple-pay{
+    color: yellow;
+}
+
+.thanhtoan-tainha{
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding:20px 10px;
+}
+
+.diachi-vanchuyen{
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding:20px 10px;
+}
+
+#btn-pay{
+    width: 100%;
+    background-color: blue;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    padding:20px 0px;
+    border: none;
+}
+
+.container-right{
+    margin-top: 50px;
+}
+.magiamgia{
+    margin-bottom: 20px;
+}
+
+.magiamgia>input{
+    padding: 10px 20px;
+    width: 300px;
+    background-color:transparent;
+    color: #fff;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.magiamgia>button{
+    padding: 11px 20px;
+    background-color:rgba(39, 39, 39, 0.781);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+.giaca{
+    position: relative;
+}
+
+.giaca>span{
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+
+
+
+

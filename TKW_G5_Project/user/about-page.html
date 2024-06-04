@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="includes/about_page.css">
+    <script src="https://kit.fontawesome.com/6dd3e0021a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../includes/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="../index.html">
+                <img class="logo" src="../user/imgs/logo.avif">
+            </a>
+            <ul class="links">
+                <li class="hideMenuBar"><a class="active-menu" href="../index.html">Home</a></li>
+                <li class="hideMenuBar"><a href="../user/about-page.html">About</a></li>
+                <li class="hideMenuBar"><a href="../user/contact-page.html">Contact</a></li>
+                <li class="hideMenuBar">
+                    <a href="../user/find-products.html" id="store">Danh Mục Sản Phẩm</a>
+                    <!-- Trong store có drop down menu -->
+                    <div class="dropdown">
+                        <ul class="menu-inside">
+                            <li><a href="#" id="loai-sp">Quần</a>
+                                <ul class="menu-inside2 cac-loai-quan">
+                                    <li><a href="../user/find-products.html?filter=quan-ngan">Quần ngắn</a></li>
+                                    <li><a href="../user/find-products.html?filter=quan-ngan">Quần dài</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#" id="loai-sp">Áo</a>
+                                <ul class="menu-inside2 cac-loai-ao">
+                                    <li><a href="../user/find-products.html?filter=ao-thun">Áo thun</a></li>
+                                    <li><a href="../user/find-products.html?filter=ao-khoac">Áo khoác</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" id="loai-sp">Phụ kiện</a>
+                                <ul class="menu-inside2 cac-loai-phukien">
+                                    <li><a href="../user/find-products.html?filter=phukien-balo">Balo</a></li>
+                                    <li><a href="../user/find-products.html?filter=phukien-tui">Túi</a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+            <ul class="ults">
+                <li class="hideMenuBar">
+                    <!-- chỗ này m làm một js, trước khi đăng nhập thì link sigIn-signup/signIn-Up;
+                    sau khi đăng nhập là link information/address -->
+                    <a id="user-login" onclick="dieuHuongUser()">
+                        <div class="login-btn">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="hideMenuBar">
+                    <a>
+                        <div class="search_btn">
+                            <form method="get" action="../user/find-products.html?search=">
+                                <input type="search" placeholder="Search" class="search-text" required name="search">
+                                <button class="nut-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </form>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="hideMenuBar">
+                    <a href="../user/cart-page.html">
+                        <div class="cart-btn">
+                            <i class="fa-solid fa-cart-shopping" id="cart-icon"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li onclick="showSidebar()" class="btn-menu">
+                    <a>
+                        <div class="menubar">
+                            <i class="fa-solid fa-bars" id="menubar"></i>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="hideMenuBar">
+                    <a href="#" style="cursor: pointer;" hidden id="logout">
+                        <div>
+                            <i class="fa-solid fa-right-from-bracket fa-2xl" style="color: #ffffff;"></i>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Side bar menu -->
+            <ul class="sidebar">
+                <li onclick="hideSideBar()"><a href="#"><i class="fa-solid fa-xmark"></i></a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="../user/contact-page.html">Contact</a></li>
+                <li><a href="#">Store</a></li>
+                <li><a href="#">Login</a></li>
+                <li><a href="../user/cart-page.html">Shopping cart</a></li>
+            </ul>
+
+            <!-- Shopping cart  -->
+            <div class="cart">
+                <h2 class="cart-title">Giỏ hàng</h2>
+
+                <!-- content -->
+                <div class="cart-content" id="cart-content">
+
+                </div>
+
+                <div class="total">
+                    <div class="total-title">Tổng tiền</div>
+                    <div class="total-price" id="total-price">0</div>
+                </div>
+
+                <div style="display: flex; justify-content: center;align-items: center;">
+                    <button type="button" class="btn-buy" onclick="muaHang()">Buy Now</button>
+                    <a href="../user/cart-page.html" style="text-decoration: none;"><button type="button"
+                            class="btn-view">View Cart</button></a>
+                </div>
+                <i class="fa-solid fa-xmark" id="close-cart"></i>
+            </div>
+
+        </div>
+    </header>
+
+    <main style="display: block; margin-top: 85px;">
+        <div class="container-about">
+            <div class="row">
+                <div class="img">
+                    <!-- <img src="../user/imgs/about-img1.jpg" alt=""> -->
+                </div>
+            </div>
+        </div>
+
+        <h1 style="color: white; margin-left: 100px;  margin-top: 100px;">Những điều cần biết về Helios</h1>
+        <div class="container-cart">
+            
+            <div class="card" style="background: url(../user/imgs/ảnh-about-1.jpg); background-position: top center;">
+                <h2>Giao hàng nhanh chóng và chính xác</h2>
+                <p>Một tốc độ bạn có thể nhận thấy.</p>
+                <img src="../user/imgs/ảnh-about-1.jpg" alt="Feature 1">
+            </div>
+            <div class="card" style="background-image: url(../user/imgs/anh-about-2.jpg);">
+                <h2>Thời thượng, trẻ chung</h2>
+                <p>Tôn vinh vẻ đẹp, san chảnh</p>
+                <img src="../user/imgs/anh-about-2.jpg" alt="Feature 2">
+            </div>
+            <div class="card" style="background-image: url(../user/imgs/ảnh-about-3.jpg); background-position: top center;">
+                <h2>Uy tín và tin cậy</h2>
+                <p>An tâm chọn lựa với chúng tôi</p>
+                <img src="../user/imgs/ảnh-about-3.jpg" alt="Feature 3">
+            </div>
+            <div class="card" style="background-image: url(../user/imgs/ảnh-about-4.jpg); background-position: top center;">
+                <h2>Đa dạng thương hiệu</h2>
+                <p>Nhiều loại thời trang theo từng loại cửa hàng</p>
+                <img src="../user/imgs/ảnh-about-4.jpg" alt="Feature 4">
+            </div>
+
+        </div>
+
+        <div class="container-detail-helios">
+            <div class="row" style="margin-bottom: 50px; background: rgba(0, 0, 0, 0.6);">
+                <div class="col-5">
+                    <img src="../user/imgs/about-3.jpg" alt="ảnh phòng" height="360">
+                </div>
+                <div class="col-7">
+                    <h2>Chúng tôi là ai?</h2>
+                    <br>
+                    <p>Chúng tôi là một cửa hàng chuyên cung cấp các sản phẩm chất lượng cao và dịch vụ uy tín. Với nhiều
+                        năm kinh nghiệm trong ngành, chúng tôi luôn nỗ lực mang đến cho khách hàng những trải nghiệm mua sắm
+                        tuyệt vời nhất. Đội ngũ nhân viên của chúng tôi luôn tận tâm, nhiệt tình và sẵn sàng hỗ trợ bạn mọi
+                        lúc, mọi nơi.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 50px; background: rgba(0, 0, 0, 0.6);">
+                <div class="col-8">
+                    <h2>Chúng tôi làm gì?</h2><br>
+                    <p>Cửa hàng của chúng tôi chuyên cung cấp đa dạng các sản phẩm từ thời trang, điện tử, gia dụng đến mỹ
+                        phẩm và thực phẩm. Chúng tôi cam kết chỉ bán những sản phẩm chính hãng, đảm bảo an toàn và chất
+                        lượng cho người tiêu dùng. Không chỉ dừng lại ở việc bán hàng, chúng tôi còn cung cấp các dịch vụ
+                        hậu mãi như bảo hành, đổi trả hàng và tư vấn sử dụng sản phẩm để khách hàng luôn an tâm khi mua sắm
+                        tại đây.</p>
+                </div>
+                <div class="col-4">
+                    <img src="../user/imgs/about-img2.jpg" alt="ảnh phòng" height="360">
+                </div>
+                
+            </div>
+
+            <div class="row" style="margin-bottom: 50px; background: rgba(0, 0, 0, 0.6);">
+                <div class="col-12" id="about-end-detail">
+                    <h2>Chúng tôi có gì? </h2><br>
+                    <p>
+                        - Sản phẩm chất lượng cao: Tất cả các mặt hàng của chúng tôi đều được chọn lọc kỹ càng từ những nhà
+                        cung cấp uy tín, đảm bảo nguồn gốc rõ ràng và chất lượng vượt trội.
+                        <br>
+                        <br>
+                        - Giá cả cạnh tranh: Chúng tôi luôn nỗ lực để mang đến giá thành tốt nhất cho khách hàng mà không làm
+                        giảm đi chất lượng của sản phẩm.
+                        <br>
+                        <br>
+                        - Dịch vụ khách hàng tuyệt vời: Đội ngũ nhân viên của chúng tôi được đào tạo chuyên nghiệp, luôn sẵn
+                        sàng lắng nghe và giải đáp mọi thắc mắc của bạn.
+                        <br>
+                        <br>
+                        - Chương trình khuyến mãi hấp dẫn: Chúng tôi thường xuyên có những chương trình giảm giá, quà tặng và
+                        ưu đãi đặc biệt dành cho khách hàng thân thiết.
+                    </p>
+                </div>
+                
+                
+            </div>
+            <!-- <div class="row">
+                <div class="col-1">
+                    
+                </div>
+                <div class="col-2">
+                    
+                </div>
+                <div class="col-3">
+                    <h2>Chúng tôi có gì? </h2>
+                    <p>
+                        - Sản phẩm chất lượng cao: Tất cả các mặt hàng của chúng tôi đều được chọn lọc kỹ càng từ những nhà
+                        cung cấp uy tín, đảm bảo nguồn gốc rõ ràng và chất lượng vượt trội.
+                        <br>
+                        - Giá cả cạnh tranh: Chúng tôi luôn nỗ lực để mang đến giá thành tốt nhất cho khách hàng mà không làm
+                        giảm đi chất lượng của sản phẩm.
+                        <br>
+                        - Dịch vụ khách hàng tuyệt vời: Đội ngũ nhân viên của chúng tôi được đào tạo chuyên nghiệp, luôn sẵn
+                        sàng lắng nghe và giải đáp mọi thắc mắc của bạn.
+                        <br>
+                        - Chương trình khuyến mãi hấp dẫn: Chúng tôi thường xuyên có những chương trình giảm giá, quà tặng và
+                        ưu đãi đặc biệt dành cho khách hàng thân thiết.
+                    </p>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- slide gioi thieu thanh vien -->
+        <div class="slider-container">
+            <h2 style="color: white;">NHÓM ĐIỀU HÀNH CỦA CHÚNG TÔI</h2>
+            <button class="prev" id="prev">❮</button>
+            <div class="slider" id="slider">
+                <div class="slide">
+                    <p style="margin-bottom: 20px;">"Trải nghiệm và dịch vụ mua hàng của khách hàng luôn đặt hàng đầu! 
+                        Nhanh chóng, chính xác, phù hợp là điều quan trọng nhất đối với trải nghiệm của khách hàng!"</p>
+                    <img src="../user/imgs/user1.jpg" width="150">
+                    <p>Hải Đăng</p>
+                    <p>CEO, Helios, chuỗi cửa hàng thời trang toàn quốc Helios.</p>
+                </div>
+                <div class="slide">
+                    <p style="margin-bottom: 20px;">"Phong cách của mỗi người luôn được tôn vinh một cách đặt biệt, vì vậy hãy lựa chọn và phối trang phục theo cách của bạn!"</p>
+                    <img src="../user/imgs/user2.jpg" width="150">
+                    <p>Quân</p>
+                    <p>CEO, Helios, chuỗi cửa hàng thời trang toàn quốc Helios.</p>
+                </div>
+                <div class="slide">
+                    <p style="margin-bottom: 20px;">"Đấm chìm trong đam mê thời trang chưa bao giờ là hết thời, cứ thỏa thích chọn lựa quần áo cùng với helios mà không lo về giá cả!"</p>
+                    <img src="../user/imgs/user3.jpg" width="150">
+                    <p>Thành Đạt</p>
+                    <p>CEO, Helios, chuỗi cửa hàng thời trang toàn quốc Helios.</p>
+                </div>
+
+            </div>
+            <button class="next" id="next">❯</button>
+        </div>
+
+        <!-- Nhà tài trợ -->
+        <div class="con-nhataitro">
+            <div class="slider-ntt">
+                <img src="../user/imgs/nhataitro1.png" height="100">
+                <img src="../user/imgs/nhataitro2.png" width="150" height="100">
+                <img src="../user/imgs/nhataitro3.png" width="150" height="100">
+                <img src="../user/imgs/nhataitro4.png" width="150" height="100">
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container-footer">
+            <div class="footer_1">
+                <a href="../index.html">HELIOS</a>
+                <p>Thương hiệu thời trang số một Việt Nam.</p>
+                <div class="f_icon">
+                    <i class="fa-brands fa-facebook"></i>
+                    <i class="fa-brands fa-instagram"></i>
+                    <i class="fa-brands fa-youtube"></i>
+                    <i class="fa-brands fa-tiktok"></i>
+                </div>
+            </div>
+
+            <div class="footer_2">
+                <h3>SHOPPING</h3>
+                <a href="../index.html">Home Page</a>
+                <a href="../user/about-page.html">About</a>
+                <a href="../user/contact-page.html">Contact</a>
+                <a href="../user/find-products.html">Store</a>
+            </div>
+
+            <div class="footer_3">
+                <h3>HỖ TRỢ</h3>
+                <a href="#">Chính sách</a>
+                <a href="#">Liên hệ với chúng tôi</a>
+                <a href="#">Phương thức thanh toán</a>
+                <a href="#">Vận chuyển</a>
+            </div>
+
+            <div class="footer_4">
+                <hr>
+                <h3>Đăng ký nhận bản tin</h3>
+                <input id="input_email" type="email" placeholder="Email của bạn">
+                <input id="input_sub" type="button" value="Đăng ký">
+            </div>
+
+        </div>
+    </footer>
+</body>
+
+<script src="includes/about_page.js"></script>
+<script>
+    $(document).ready(function () {
+        var loginButton = document.getElementById("logout");
+        let id = localStorage.getItem("user_id");
+        if (!isEmpty(id)) {
+            loginButton.removeAttribute("hidden");
+        }
+    });
+    $(document).ready(function () {
+        var loginButton = document.getElementById("logout");
+        let id = localStorage.getItem("user_id");
+        if (!isEmpty(id)) {
+            loginButton.addEventListener('click', () => {
+                localStorage.removeItem("user_id");
+                window.location.href = '../TKW_G5_Project/user/signIn-signUp/signIn-Up.html';
+            });
+        }
+    }); 
+    document.addEventListener('scroll', function() {
+    const backgroundContainer = document.querySelector('.img');
+
+    let scrollPosition = window.scrollY;
+
+    let newSize = Math.max(90, 100 - scrollPosition / 10) + '%';
+    let newBorderRadius = 50 + 'px';
+
+    backgroundContainer.style.backgroundSize = newSize;
+    });
+
+</script>
+
+</html>
